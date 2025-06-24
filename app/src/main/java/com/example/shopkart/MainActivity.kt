@@ -31,6 +31,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -379,61 +381,119 @@ fun ProductCard(product: Product) {
             .fillMaxWidth()
             .padding(12.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Box(modifier = Modifier.padding(12.dp)) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Wishlist"
-                )
-                Text(text = "Best seller", color = Color.Black, modifier = Modifier
-                    .background(Color.Green)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Image(
-                painter = painterResource(id = product.imageRes),
-                contentDescription = product.name,
+            // Wishlist Icon (Top-left)
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+                contentDescription = "Wishlist",
+                tint = Color.Black,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
+                    .align(Alignment.TopStart)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // Best Seller Badge (Top-right)
+            Text(
+                text = "Best seller",
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .background(Color(0xFF2ECC71), shape = RoundedCornerShape(12.dp))
+                    .padding(horizontal = 10.dp, vertical = 4.dp),
+                style = MaterialTheme.typography.labelSmall
+            )
 
-            Text(text = product.brand, color = Color.Green)
-            Text(text = product.name, style = MaterialTheme.typography.titleSmall)
-            Text(text = product.description, style = MaterialTheme.typography.bodySmall)
+            Column(
+                modifier = Modifier
+                    .padding(top = 32.dp) // space for top icons
+            ) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    // Product Image (Left Side)
+                    Image(
+                        painter = painterResource(id = product.imageRes),
+                        contentDescription = product.name,
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
 
-            Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
-            Row {
-                Text(text = "₹${product.discountPrice}", color = Color.Blue)
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "₹${product.originalPrice}", style = TextStyle(textDecoration = TextDecoration.LineThrough))
-            }
+                    // Right Content
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = product.brand,
+                            color = Color(0xFF27AE60),
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                        Text(
+                            text = product.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = product.description,
+                            style = MaterialTheme.typography.bodySmall
+                        )
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                repeat(5) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = Color.Yellow)
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "Rs. ${product.discountPrice}",
+                                color = Color(0xFF2980B9),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "Rs. ${product.originalPrice}",
+                                style = TextStyle(
+                                    textDecoration = TextDecoration.LineThrough,
+                                    color = Color.Gray
+                                )
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            repeat(5) {
+                                Icon(
+                                    Icons.Default.Star,
+                                    contentDescription = null,
+                                    tint = Color(0xFFF1C40F),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                            Text(
+                                text = "${product.reviews} reviews",
+                                modifier = Modifier.padding(start = 6.dp),
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        }
+                    }
                 }
-                Text(text = "${product.reviews} reviews", modifier = Modifier.padding(start = 6.dp))
-            }
 
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
-            }
+                Spacer(modifier = Modifier.height(12.dp))
 
+                Button(
+                    onClick = { /* Add to cart */ },
+                    shape = RoundedCornerShape(25),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF27AE60)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "Add to cart",
+                        tint = Color.White
+                    )
+                }
+
+            }
         }
     }
 }
